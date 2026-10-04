@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="tt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Тәҗвид 1 — нәтиҗәләр журналы</title>
+  <style>
+    :root{font-family:Arial,"Noto Sans",sans-serif;color:#402e39;background:#fff3f8}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1200px;margin:0 auto;padding:20px}header{background:linear-gradient(125deg,#713454,#a3547f);color:white;padding:22px;border-bottom:5px solid #e5b6c9;border-radius:18px}h1{font-family:Georgia,serif;margin:0;font-size:clamp(28px,4vw,46px)}header a{color:#fff}main{background:#fffafb;padding:clamp(20px,4vw,40px);border:1px solid #ead7e1;border-radius:18px;margin-top:18px;min-height:60vh}input,select,button{font:inherit;padding:12px;border-radius:10px;border:1px solid #e4cbd8}button{background:#833d64;color:#fff;font-weight:bold;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.field{display:grid;gap:8px;max-width:330px;margin:15px 0}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.filters select{min-width:180px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:800px}th,td{text-align:left;padding:12px;border-bottom:1px solid #ead7e1;vertical-align:top}th{background:#fcecf3}details{max-width:420px}summary{cursor:pointer;color:#833d64;font-weight:bold}.answer{white-space:pre-wrap;overflow-wrap:anywhere}.error{color:#923c37;font-weight:bold}.status{color:#715f6b}
+  </style>
+</head>
+<body><div class="wrap"><header><h1>Тәҗвид 1 · нәтиҗәләр журналы</h1><a href="index.html">← Дәресләргә кайтырга</a></header><main>
+  <section id="loginPanel"><h2>Укытучы өчен</h2><p>Нәтиҗәләрне карау өчен укытучы PIN-кодын кертегез.</p><form id="loginForm"><label class="field">PIN-код<input id="teacherPin" type="password" autocomplete="off" required></label><button type="submit">Журналны ачарга</button></form><p class="error" id="loginError" role="alert"></p></section>
+  <section id="dashboard" hidden><h2>Җибәрелгән нәтиҗәләр</h2><p class="status" id="count"></p><div class="filters"><select id="groupFilter"><option value="">Барлык төркемнәр</option></select><select id="lessonFilter"><option value="">Барлык дәресләр</option></select><button id="refreshBtn" type="button">Яңартырга</button><button id="csvBtn" type="button">CSV итеп алырга</button></div><div class="table-wrap"><table><thead><tr><th>Вакыт</th><th>Укучы</th><th>Төркем</th><th>Дәрес</th><th>Нәтиҗә</th><th>Җаваплар</th></tr></thead><tbody id="rows"></tbody></table></div><p class="error" id="loadError" role="alert"></p></section>
+  </main></div><script src="teacher.js?v=1"></script></body>
+</html>
