@@ -16,6 +16,27 @@
   const resultsEndpoint = 'https://kxwhwmxzmtvueksyayvz.supabase.co/functions/v1/submit-tajwid1-quiz';
   const localPreview = ['127.0.0.1', 'localhost'].includes(location.hostname);
   const $ = id => document.getElementById(id);
+  function fillGroupSelect(id, placeholder) {
+    const select = $(id);
+    select.add(new Option(placeholder, ''));
+    const addBlock = (label, count, prefix = label) => {
+      const block = document.createElement('optgroup');
+      block.label = label;
+      for (let number = 1; number <= count; number++) {
+        const value = `${prefix} — ${number} группа`;
+        block.append(new Option(value, value));
+      }
+      select.add(block);
+    };
+    for (let course = 1; course <= 4; course++) {
+      addBlock(`${course} курс`, 8);
+      addBlock(`Онлайн ${course} курс`, 10);
+    }
+    for (const direction of ['Дагват', 'Мәгърифәт', 'Остазлар']) {
+      addBlock(`${direction}, 1 курс`, 3);
+    }
+    addBlock('Коръән уку мәктәбе', 10);
+  }
   const screens = ['home', 'intro', 'review', 'identity', 'quiz', 'result'];
   const stageNames = {
     intro: 'Дәрес белән танышу', review: 'Сораулар аша кабатлау',
@@ -179,14 +200,19 @@
   }
   setupHome();
   setupLesson();
-  $('studentGroup').value = params.get('group') || '';
+  fillGroupSelect('teacherGroup', 'Группу выберет ученик');
+  fillGroupSelect('studentGroup', 'Выберите группу');
+  const presetGroup = params.get('group') || '';
+  if ([...$('studentGroup').options].some(option => option.value === presetGroup && presetGroup)) {
+    $('studentGroup').value = presetGroup;
+  }
 
   $('copyLinkBtn').addEventListener('click', async () => {
     const copied = await copyText(lessonUrl(), $('teacherLink'));
     $('copyNote').textContent = copied ? 'Сылтама күчереп алынды.' : 'Сылтаманы астагы юлдан күчереп алыгыз.';
   });
   for (const id of ['teacherLesson', 'teacherGroup']) {
-    $(id).addEventListener(id === 'teacherLesson' ? 'change' : 'input', () => {
+    $(id).addEventListener('change', () => {
       $('teacherLink').classList.add('hidden');
       $('copyNote').textContent = '';
     });
@@ -203,7 +229,7 @@
   });
   $('startTestBtn').addEventListener('click', () => {
     if (!$('studentName').value.trim() || !$('studentGroup').value.trim()) {
-      $('identityError').textContent = 'Исем-фамилия һәм төркем юлларын тутырыгыз.';
+      $('identityError').textContent = 'Исем-фамилияне языгыз һәм группаны сайлагыз.';
       $('identityError').classList.remove('hidden');
       return;
     }
