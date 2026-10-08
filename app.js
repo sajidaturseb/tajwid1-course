@@ -98,10 +98,16 @@
         note.textContent = section.note;
         wrap.append(note);
       }
-      section.paragraphs.forEach(value => {
+      let readingBlock;
+      section.paragraphs.forEach((value, index) => {
+        if (index % 2 === 0) {
+          readingBlock = document.createElement('div');
+          readingBlock.className = `reading-block reading-block-${Math.floor(index / 2) % 3 + 1}`;
+          wrap.append(readingBlock);
+        }
         const paragraph = document.createElement('p');
         paragraph.textContent = value;
-        wrap.append(paragraph);
+        readingBlock.append(paragraph);
       });
       reading.append(wrap);
     });
