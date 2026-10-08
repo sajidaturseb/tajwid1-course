@@ -47,6 +47,15 @@
     .option:hover{border-color:#d59fbb}.option .letter{background:#f9eaf2}.option:has(input:checked){background:#fbeef4;border-color:#c885a8}
     .score div,.open-preview{background:#fcf2f7}.summary,.note,.result-instruction{background:#fef0f5}.reading .note-text{border-color:#dba1bf;color:#734260}
     input[type=text],select,textarea{border-color:#e4cbd8}input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px #a14f7926}
+    .reading section{margin:30px 0 38px}
+    .reading section h3{padding-bottom:12px;border-bottom:2px solid #ecd6e2}
+    .reading-block{margin:14px 0;padding:16px 22px;border:1px solid;border-left-width:5px;border-radius:16px;box-shadow:0 5px 18px #7134540a}
+    .reading-block-1{background:#fff1f7;border-color:#eed2df;border-left-color:#c57b9f}
+    .reading-block-2{background:#f7f2fb;border-color:#e7ddef;border-left-color:#a48abe}
+    .reading-block-3{background:#fff8ec;border-color:#f1e1c8;border-left-color:#d6ac6c}
+    .reading-block p{font-size:18px;line-height:1.72;overflow-wrap:break-word}
+    .reading-block p:first-child{margin-top:0}.reading-block p:last-child{margin-bottom:0}
+    @media(max-width:420px){.reading-block{padding:14px 16px}.reading-block p{font-size:17px}}
     @media(max-width:850px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.teacher{order:-1}.top{padding:14px}.brand strong{font-size:20px}.pill{display:none}.score{grid-template-columns:1fr}main{min-height:0}}
     @media(max-width:420px){h1{font-size:32px}h2{font-size:29px}.wrap{width:calc(100% - 16px);margin-top:8px}main{padding:24px 18px}.lead{font-size:17px}}
     #studentGroup,#teacherGroup{font-weight:800;min-height:58px}
@@ -66,6 +75,6 @@
       <section id="result" class="hidden"><p class="eyebrow">Дәрес тәмам</p><h1>Мәә шәә Аллаһ, син дәресне үттең!</h1><p class="lead" id="resultText"></p><div class="score"><div><strong id="scoreText"></strong><span>Дөрес җавап</span></div></div><p class="result-instruction" id="sendInstruction"><strong>Сез тестны үттегез.</strong> Нәтиҗә укытучы журналына җибәрелә…</p><div class="actions"><button class="primary hidden" id="sendResultBtn" type="button" aria-describedby="sendInstruction">Кабат җибәрергә</button><button class="secondary" id="retryBtn" type="button">Кабат үтәргә</button></div><p class="small" id="resultSendNote" role="status" aria-live="polite"></p></section>
     </main>
   </div>
-  <script src="lessons.js?v=1"></script><script src="app.js?v=groups-20261006"></script>
+  <script src="lessons.js?v=1"></script><script src="app.js?v=reading-blocks-20261008"></script>
 </body>
 </html>
