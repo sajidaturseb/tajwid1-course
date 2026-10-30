@@ -17,6 +17,7 @@
   let startedAt = 0;
   let attemptId = '';
   let sent = false;
+  let sending = false;
   const resultsEndpoint = 'https://kxwhwmxzmtvueksyayvz.supabase.co/functions/v1/submit-tajwid1-quiz';
   const localPreview = location.protocol === 'file:' || ['127.0.0.1', 'localhost'].includes(location.hostname);
   const $ = id => document.getElementById(id);
@@ -251,11 +252,13 @@
     $('scoreText').textContent = `${right.reduce((a, b) => a + b, 0)} / ${current.questions.length}`;
     $('resultText').textContent = `${$('studentName').value.trim()} · ${$('studentGroup').value.trim()}. ${tr('Җавапларны карап, дәресне кабат үтәргә мөмкин.', 'Вы можете просмотреть ответы и пройти урок ещё раз.')}`;
     $('sendResultBtn').classList.add('hidden');
-    $('sendInstruction').innerHTML = tr('<strong>Сез тестны үттегез.</strong> Нәтиҗә укытучы журналына җибәрелә…', '<strong>Вы прошли тест.</strong> Результат передаётся в журнал учителя…');
+    $('sendInstruction').textContent = '';
+    $('sendInstruction').classList.add('hidden');
     $('resultSendNote').textContent = '';
     show('result');
     if (localPreview) {
       $('sendInstruction').innerHTML = tr('<strong>Бу — карау өчен үрнәк.</strong> Әлегә нәтиҗә укытучы журналына җибәрелми.', '<strong>Это местный просмотр.</strong> Результат не отправляется в журнал учителя.');
+      $('sendInstruction').classList.remove('hidden');
     } else {
       void sendResult();
     }
@@ -309,6 +312,7 @@
     startedAt = Date.now();
     attemptId = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     sent = false;
+    sending = false;
     renderQuiz();
     show('quiz');
   });
@@ -348,11 +352,13 @@
     }
   });
   async function sendResult() {
-    if (sent) return;
+    if (sent || sending) return;
+    sending = true;
     const button = $('sendResultBtn');
     button.disabled = true;
-    button.textContent = tr('Җибәрелә…', 'Отправляется…');
-    $('resultSendNote').textContent = tr('Нәтиҗә җибәрелә, бераз көтегез.', 'Подождите, результат отправляется.');
+    $('sendInstruction').textContent = '';
+    $('sendInstruction').classList.add('hidden');
+    $('resultSendNote').textContent = '';
     const score = current.questions.reduce((sum, question, index) => sum + Number(quizAnswers[index] === question.a), 0);
     const payload = {
       attemptId,
@@ -370,25 +376,32 @@
         isCorrect: quizAnswers[index] === question.a
       }))
     };
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
     try {
       const response = await fetch(resultsEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error(result.error || 'send_failed');
       sent = true;
-      button.textContent = tr('Җибәрелде', 'Отправлено');
-      $('sendInstruction').innerHTML = tr('<strong>Нәтиҗә җибәрелде.</strong> Ул укытучы журналында сакланды.', '<strong>Результат записан.</strong> Он сохранён в журнале учителя.');
-      $('resultSendNote').textContent = tr('Нәтиҗә укытучы журналына җибәрелде. Башка бернәрсә эшләргә кирәкми.', 'Результат сохранён в журнале учителя. Больше ничего делать не нужно.');
+      $('sendInstruction').textContent = tr('Эшегез укытучы журналына теркәлде.', 'Ваша работа записана в журнале преподавателя.');
+      $('sendInstruction').classList.remove('hidden');
+      $('resultSendNote').textContent = '';
       button.classList.add('hidden');
     } catch {
       button.disabled = false;
       button.textContent = tr('Кабат җибәрергә', 'Отправить ещё раз');
       button.classList.remove('hidden');
-      $('sendInstruction').innerHTML = tr('<strong>Нәтиҗә әлегә җибәрелмәде.</strong> Кабат җибәрү төймәсенә басыгыз.', '<strong>Результат пока не записан.</strong> Нажмите «Отправить ещё раз».');
-      $('resultSendNote').textContent = tr('Нәтиҗә җибәрелмәде. Интернетны тикшереп, кабат басыгыз.', 'Проверьте соединение и повторите отправку.');
+      $('sendInstruction').textContent = tr('Эшегез журналга теркәлмәде. Кабат җибәрергә кирәк.', 'Работа не записана в журнале. Отправьте ещё раз.');
+      $('sendInstruction').classList.remove('hidden');
+      $('resultSendNote').textContent = '';
+    } finally {
+      clearTimeout(timer);
+      sending = false;
     }
   }
   $('sendResultBtn').addEventListener('click', sendResult);
