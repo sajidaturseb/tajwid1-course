@@ -82,7 +82,7 @@
       }
       select.add(block);
     };
-    for (let course = 1; course <= 4; course++) {
+    addBlock('Онлайн 1 курс — татарча', 24, 'Онлайн 1 курс, татар'); addBlock('Онлайн 1 курс — русский', 5, 'Онлайн 1 курс, рус'); for (let course = 1; course <= 4; course++) {
       addBlock(`${course} курс`, 8);
       addBlock(`Онлайн ${course} курс`, 10);
     }
