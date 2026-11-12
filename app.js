@@ -84,7 +84,7 @@
     };
     addBlock('Онлайн 1 курс — татарча', 24, 'Онлайн 1 курс, татар'); addBlock('Онлайн 1 курс — русский', 5, 'Онлайн 1 курс, рус'); for (let course = 1; course <= 4; course++) {
       addBlock(`${course} курс`, 8);
-      addBlock(`Онлайн ${course} курс`, 10);
+
     }
     for (const direction of ['Дагват', 'Мәгърифәт', 'Остазлар']) {
       addBlock(`${direction}, 1 курс`, 3);
